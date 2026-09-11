@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shortcut Mandiri, Robot & BNI Pro</title>
+    <title>Shortcut Mandiri, Report & Robot</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -33,7 +33,6 @@
             box-sizing: border-box;
         }
 
-        /* Navigasi Utama Tab Switcher */
         .tab-navigation {
             display: flex;
             justify-content: center;
@@ -71,6 +70,13 @@
             box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
         }
 
+        .tab-btn.active[data-tab="report"] {
+            background: linear-gradient(135deg, var(--accent-blue), #818cf8);
+            color: #0f172a;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+        }
+
         .tab-btn.active[data-tab="robot"] {
             background: linear-gradient(135deg, var(--accent-purple), #6366f1);
             color: #fff;
@@ -78,14 +84,6 @@
             box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
         }
 
-        .tab-btn.active[data-tab="bni"] {
-            background: linear-gradient(135deg, var(--accent-blue), #818cf8);
-            color: #0f172a;
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
-        }
-
-        /* Konten Tab Visibility */
         .tab-content {
             display: none;
             background-color: var(--card-bg);
@@ -105,40 +103,26 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Style Umum Elemen */
-        h2, h1 {
+        h2 {
             margin-top: 0;
             color: #fff;
             font-weight: 800;
+            font-size: 24px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        h2 { font-size: 24px; }
-        h1 { 
-            font-size: 28px; 
-            letter-spacing: -0.5px;
-            justify-content: center;
-            margin-bottom: 8px;
-        }
-
         #tab-mandiri h2 span { color: #eab308; }
+        #tab-report h2 span { color: var(--accent-blue); }
         #tab-robot h2 span { color: var(--accent-purple); }
-        #tab-bni h1 {
-            background: linear-gradient(to right, var(--accent-blue), #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
 
-        p.subtitle, p.desc {
+        p.desc {
             color: #94a3b8;
             font-size: 14px;
             margin-bottom: 20px;
         }
-        p.subtitle { text-align: center; margin-bottom: 32px; }
 
-        /* Textarea / Input Area */
         textarea.mandiri-input {
             width: 100%;
             height: 150px;
@@ -160,74 +144,22 @@
             border-color: #eab308;
             box-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
         }
+        #tab-report textarea.mandiri-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
         #tab-robot textarea.mandiri-input:focus {
             border-color: var(--accent-purple);
             box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
         }
 
-        /* Area Paste Gambar BNI */
-        #paste-area {
-            border: 2px dashed #475569;
-            padding: 50px 20px;
-            text-align: center;
-            border-radius: 16px;
-            background-color: rgba(15, 23, 42, 0.6);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        #paste-area:hover {
-            border-color: var(--accent-blue);
-            background-color: rgba(56, 189, 248, 0.04);
-            transform: translateY(-2px);
-        }
-        #paste-area p {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--accent-blue);
-            margin: 0;
-        }
-        #paste-area span {
-            display: block;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 8px;
-            font-weight: 400;
-        }
-
-        .preview-wrapper {
-            margin-top: 24px;
-            display: none;
-            justify-content: center;
-        }
-        #preview-img {
-            max-width: 100%;
-            max-height: 180px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        #status {
-            font-weight: 600;
-            color: #fbbf24;
-            margin-top: 20px;
-            text-align: center;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            min-height: 20px;
-        }
-
-        /* Section Output */
-        .output-header, .result-header {
+        .output-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 30px;
             margin-bottom: 10px;
         }
-        .result-header { margin-top: 32px; }
 
         h3 {
             margin: 0;
@@ -236,9 +168,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        #tab-bni h3 { color: var(--text-muted); }
 
-        /* Tombol-Tombol */
         .btn-purple {
             background-color: var(--accent-purple);
             color: white;
@@ -251,7 +181,6 @@
             transition: all 0.2s;
         }
         .btn-purple:hover { background-color: var(--accent-purple-hover); transform: translateY(-1px); }
-        .btn-purple:active { transform: translateY(1px); }
 
         .btn-yellow {
             background-color: #eab308;
@@ -265,69 +194,20 @@
             transition: all 0.2s;
         }
         .btn-yellow:hover { background-color: #ca8a04; transform: translateY(-1px); }
-        .btn-yellow:active { transform: translateY(1px); }
 
         .btn-blue {
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent-blue), #818cf8);
+            background-color: var(--accent-blue);
             color: #0f172a;
             border: none;
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: 700;
-            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 6px;
             cursor: pointer;
-            margin-top: 14px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+            transition: all 0.2s;
         }
-        .btn-blue:hover {
-            background: linear-gradient(135deg, var(--accent-blue-hover), #6366f1);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.3);
-        }
-        .btn-blue:active { transform: translateY(1px); }
+        .btn-blue:hover { background-color: var(--accent-blue-hover); transform: translateY(-1px); }
 
-        .toast {
-            font-size: 12px;
-            color: var(--success-color);
-            font-weight: 600;
-            background-color: rgba(74, 222, 128, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .toast.show { opacity: 1; }
-
-        /* Textarea Output BNI */
-        textarea.bni-output {
-            width: 100%;
-            height: 90px;
-            padding: 16px;
-            background-color: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            resize: none;
-            box-sizing: border-box;
-            font-size: 16px;
-            font-weight: 600;
-            color: #e2e8f0;
-            font-family: 'Fira Code', 'Courier New', Courier, monospace;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-        textarea.bni-output:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-        }
-
-        /* Kotak Terminal Tabel Mandiri / Robot */
         .terminal-box {
             background-color: #0b0f19;
             border: 1px solid var(--border-color);
@@ -375,25 +255,7 @@
             text-align: center;
             padding: 20px 0;
         }
-
-        /* Lencana Informasi */
-        .badge-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 24px;
-        }
-
-        .badge {
-            font-size: 11px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 6px 12px;
-            border-radius: 8px;
-            color: var(--text-muted);
-            border: 1px solid var(--border-color);
-        }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 
@@ -401,15 +263,15 @@
     <button class="tab-btn active" data-tab="mandiri" onclick="switchTab('mandiri')">
         <span>⚡</span> SHORCUT MANDIRI
     </button>
+    <button class="tab-btn" data-tab="report" onclick="switchTab('report')">
+        <span>📊</span> SHORCUT REPORT
+    </button>
     <button class="tab-btn" data-tab="robot" onclick="switchTab('robot')">
         <span>🤖</span> SHORCUT ROBOT
     </button>
-    <button class="tab-btn" data-tab="bni" onclick="switchTab('bni')">
-        <span>🏦</span> SHORCUT BNI
-    </button>
 </div>
 
-<!-- TAB 1: MANDIRI ORIGINAL -->
+<!-- TAB 1: SHORCUT MANDIRI -->
 <div id="tab-mandiri" class="tab-content active">
     <h2><span>⚡</span> SHORCUT MANDIRI</h2>
     <p class="desc">Sistem parser data teks bawaan asli</p>
@@ -441,7 +303,39 @@
     </div>
 </div>
 
-<!-- TAB 2: SHORTCUT ROBOT -->
+<!-- TAB 2: SHORCUT REPORT -->
+<div id="tab-report" class="tab-content">
+    <h2><span>📊</span> SHORCUT REPORT</h2>
+    <p class="desc">Sistem parser data khusus format laporan transaksi</p>
+    
+    <textarea id="inputDataReport" class="mandiri-input" oninput="prosesDataReport()" placeholder="Tempel data report di sini bray..."></textarea>
+    
+    <div class="output-header">
+        <h3>Hasil Tampilan Berwarna:</h3>
+        <button class="btn-blue btn-copy-report" onclick="copyKeClipboardReport()">Copy Data</button>
+    </div>
+
+    <div class="terminal-box">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-bank" style="width: 15%;">BANK</th>
+                    <th class="col-rek" style="width: 25%;">NOMOR REK</th>
+                    <th class="col-user" style="width: 20%;">USERID</th>
+                    <th class="col-nama" style="width: 25%;">NAMA REK</th>
+                    <th class="col-nom" style="width: 15%;">NOMINAL</th>
+                </tr>
+            </thead>
+            <tbody id="bodyHasilReport">
+                <tr>
+                    <td colspan="5" class="empty-msg">Menunggu data ditempel bray...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- TAB 3: SHORCUT ROBOT -->
 <div id="tab-robot" class="tab-content">
     <h2><span>🤖</span> SHORCUT ROBOT</h2>
     <p class="desc">Sistem parser otomatis dengan pemisah tabel instan (Tab)</p>
@@ -473,45 +367,7 @@
     </div>
 </div>
 
-<!-- TAB 3: BNI OCR -->
-<div id="tab-bni" class="tab-content">
-    <h1>ASAL TAPI PASTI !!!!</h1>
-    <p class="subtitle">TEMPEL AJA NANTI DI GAS SENDIRI ITU</p>
-    
-    <div id="paste-area">
-        <p>Tempel Gambar di Sini Bray!</p>
-        <span>Klik di mana saja lalu tekan CTRL + V / CMD + V</span>
-    </div>
-
-    <div class="preview-wrapper" id="preview-wrapper">
-        <img id="preview-img" alt="Pratinjau Gambar">
-    </div>
-
-    <div id="status">Siap menerima gambar...</div>
-    <div class="result-section">
-        <div class="result-header">
-            <h3>HASILNYA DI BAWAH INI !!!</h3>
-            <div class="toast" id="toast">Copied! ✓</div>
-        </div>
-        <div class="textarea-wrapper">
-            <textarea id="output-text" class="bni-output" placeholder="Hasilnya bakal keisi otomatis di sini..." readonly></textarea>
-        </div>
-        
-        <button class="btn-blue" id="btn-copy" onclick="salinManual()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            COPY
-        </button>
-    </div>
-
-    <div class="badge-container">
-        <div class="badge">Col A: Jam</div>
-        <div class="badge">Col B: Rekening (Clean)</div>
-        <div class="badge">Col C: Nominal (Koma)</div>
-    </div>
-</div>
-
 <script>
-    // 1. FUNGSI SWITCHER TAB INDUK
     function switchTab(tabId) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -520,7 +376,7 @@
         document.getElementById(`tab-${tabId}`).classList.add('active');
     }
 
-    // 2. JAVASCRIPT ENGINE - SHORCUT MANDIRI (TAB 1)
+    // 1. SHORCUT MANDIRI
     function prosesDataKeren() {
         const input = document.getElementById('inputData').value;
         const tbody = document.getElementById('bodyHasil');
@@ -530,26 +386,15 @@
             return;
         }
 
-        const lines = input.split('\n').map(line => line.trim()).filter(line => line !== '');
+        const lines = input.split(/\r?\n/).map(line => line.trim()).filter(line => line !== '');
         let barisBankDitemukan = [];
         let htmlRows = '';
 
+        const listBank = ['DANA', 'BCA', 'GOPAY', 'MANDIRI', 'BRI', 'BNI', 'BSI', 'MAYBANK', 'LINKAJA', 'SEABANK', 'BANKJAGO', 'CIMB', 'OVO'];
+
         for (let i = 0; i < lines.length; i++) {
-            if (lines[i].includes(',') && (
-                lines[i].toUpperCase().includes('DANA') || 
-                lines[i].toUpperCase().includes('BCA') || 
-                lines[i].toUpperCase().includes('GOPAY') || 
-                lines[i].toUpperCase().includes('MANDIRI') || 
-                lines[i].toUpperCase().includes('BRI') || 
-                lines[i].toUpperCase().includes('BNI') ||
-                lines[i].toUpperCase().includes('BSI') ||
-                lines[i].toUpperCase().includes('MAYBANK') ||
-                lines[i].toUpperCase().includes('LINKAJA') ||
-                lines[i].toUpperCase().includes('SEABANK') ||
-                lines[i].toUpperCase().includes('BANKJAGO') ||
-                lines[i].toUpperCase().includes('CIMB') ||
-                lines[i].toUpperCase().includes('OVO')
-            )) {
+            let lineUpper = lines[i].toUpperCase();
+            if (lines[i].includes(',') && listBank.some(b => lineUpper.includes(b))) {
                 barisBankDitemukan.push(i);
             }
         }
@@ -563,46 +408,53 @@
             let noRek = partBank[1] || '';
             let namaPemilikMentah = partBank[2] || '';
 
-            let idxNominal = -1;
+            let idxWithdraw = -1;
             for (let m = idxBank - 1; m >= 0; m--) {
                 if (lines[m].toUpperCase().includes('WITHDRAW')) {
-                    idxNominal = m;
+                    idxWithdraw = m;
                     break;
                 }
             }
 
-            if (idxNominal !== -1) {
-                let barisNominalTeks = lines[idxNominal];
-                let barisUsernameTeks = lines[idxNominal - 1] || '';
-
-                let userID = barisUsernameTeks.replace(/^\d+/, '').trim();
+            if (idxWithdraw !== -1) {
+                let barisUsernameTeks = lines[idxWithdraw - 1] || '';
+                let userID = barisUsernameTeks.replace(/^\d+\s*/, '').trim();
                 let namaRek = namaPemilikMentah.trim();
+
                 let idxBankBerikutnya = barisBankDitemukan[k + 1];
                 if (idxBankBerikutnya) {
-                    let usernameBerikutnyaMentah = lines[idxBankBerikutnya - 3] || '';
-                    if (usernameBerikutnyaMentah) {
-                        let posisiNempel = namaRek.lastIndexOf(usernameBerikutnyaMentah);
-                        if (posisiNempel !== -1) {
-                            namaRek = namaRek.substring(0, posisiNempel).trim();
-                        } else {
-                            namaRek = namaRek.replace(/\d+[a-zA-Z0-9]+$/, '').trim();
+                    let idxWithdrawBerikutnya = -1;
+                    for (let w = idxBankBerikutnya - 1; w > idxBank; w--) {
+                        if (lines[w].toUpperCase().includes('WITHDRAW')) {
+                            idxWithdrawBerikutnya = w;
+                            break;
                         }
                     }
-                } else {
-                    namaRek = namaRek.replace(/\d+[a-zA-Z0-9]+$/, '').trim();
+
+                    if (idxWithdrawBerikutnya !== -1 && idxWithdrawBerikutnya - 1 >= 0) {
+                        let nextUserMentah = lines[idxWithdrawBerikutnya - 1] || '';
+                        let nextUserBersih = nextUserMentah.replace(/^\d+\s*/, '').trim();
+
+                        if (nextUserBersih && namaRek.toUpperCase().endsWith(nextUserBersih.toUpperCase())) {
+                            namaRek = namaRek.substring(0, namaRek.length - nextUserBersih.length).trim();
+                        }
+                    }
                 }
 
                 let nominal = "0";
-                let matchNominal = barisNominalTeks.match(/\d{1,3}(,\d{3})+/);
-                if (matchNominal) {
-                    nominal = matchNominal[0];
+                for (let n = idxWithdraw; n < idxBank; n++) {
+                    let matchNominal = lines[n].match(/\b\d{1,3}(,\d{3})+\b/);
+                    if (matchNominal) {
+                        nominal = matchNominal[0];
+                        break;
+                    }
                 }
 
                 htmlRows += `<tr>
                     <td class="val-bank">${namaBank.toUpperCase()}</td>
                     <td class="val-rek">${noRek}</td>
                     <td class="val-user">${userID}</td>
-                    <td class="val-nama">${namaRek}</td>
+                    <td class="val-nama">${namaRek.toUpperCase()}</td>
                     <td class="val-nom">${nominal}</td>
                 </tr>`;
             }
@@ -616,39 +468,88 @@
     }
 
     function copyKeClipboardMandiri() {
-        const tbody = document.getElementById('bodyHasil');
-        const rows = tbody.querySelectorAll('tr');
-        
-        if (rows.length === 1 && rows[0].classList.contains('empty-msg')) {
-            alert('Data kosong bray, apa yang mau dicopy?');
+        salinTabel('bodyHasil', '.btn-copy-mandiri', '#eab308');
+    }
+
+    // 2. SHORCUT REPORT (DIPERBAIKI SECARA PRESISI SESUAI FORMAT TERBARU)
+    function prosesDataReport() {
+        const text = document.getElementById('inputDataReport').value;
+        const tbody = document.getElementById('bodyHasilReport');
+
+        if (!text.trim()) {
+            tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">Menunggu data ditempel bray...</td></tr>';
             return;
         }
 
-        let textToCopy = "";
-        rows.forEach((row, index) => {
-            let cols = row.querySelectorAll('td');
-            if(cols.length >= 5) {
-                textToCopy += `${cols[0].innerText}\t${cols[1].innerText}\t${cols[2].innerText}\t${cols[3].innerText}\t${cols[4].innerText}`;
-                if (index < rows.length - 1) {
-                    textToCopy += "\n";
+        let lines = text.trim().split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
+        let htmlRows = '';
+
+        lines.forEach(line => {
+            // Split kolom berdasarkan Tab (\t) atau Spasi ganda
+            let parts = line.split(/\t+|\s{2,}/).map(p => p.trim()).filter(p => p !== '');
+
+            let bank = "-", norek = "-", userid = "-", namarek = "-", nominal = "-";
+
+            if (parts.length >= 6) {
+                // Berdasarkan Struktur Teks:
+                // [0] Index/No -> 1
+                // [1] Tanggal/Jam -> 2026-09-11 09:09:42
+                // [2] UserID -> pos123
+                // [3] Tipe -> Withdraw
+                // [4] Data Rekening -> RIAN PERMANA, 1750001194801, MANDIRI
+                // [5] Strip/Kosong -> -
+                // [6] Nominal -> 150,000
+
+                userid = parts[2] || "-";
+
+                // Parsing Segmen Data Rekening
+                let rekData = parts[4] || "";
+                if (rekData.includes(',')) {
+                    let rekParts = rekData.split(',').map(r => r.trim());
+                    namarek = rekParts[0] || "-";
+                    norek = rekParts[1] || "-";
+                    bank = rekParts[2] || "-";
                 }
+
+                // Parsing Nominal
+                for (let i = 5; i < parts.length; i++) {
+                    if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(parts[i])) {
+                        nominal = parts[i];
+                        break;
+                    }
+                }
+            } else {
+                // Fallback dengan Regex jika struktur terpisah spasi biasa
+                let userMatch = line.match(/\b[a-zA-Z0-9_-]{3,20}\b/g);
+                let rekMatch = line.match(/([^,]+),\s*(\d+),\s*([a-zA-Z0-9]+)/);
+                let moneyMatch = line.match(/\b\d{1,3}(,\d{3})+(\.\d+)?\b/);
+
+                if (rekMatch) {
+                    namarek = rekMatch[1].trim();
+                    norek = rekMatch[2].trim();
+                    bank = rekMatch[3].trim();
+                }
+                if (moneyMatch) nominal = moneyMatch[0];
+                if (userMatch && userMatch.length > 2) userid = userMatch[2];
             }
+
+            htmlRows += `<tr>
+                <td class="val-bank">${bank.toUpperCase()}</td>
+                <td class="val-rek">${norek}</td>
+                <td class="val-user">${userid}</td>
+                <td class="val-nama">${namarek.toUpperCase()}</td>
+                <td class="val-nom">${nominal}</td>
+            </tr>`;
         });
 
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            const btn = document.querySelector('.btn-copy-mandiri');
-            btn.innerText = 'Copied! ✓';
-            btn.style.backgroundColor = '#10b981';
-            setTimeout(() => {
-                btn.innerText = 'Copy Data';
-                btn.style.backgroundColor = '#eab308';
-            }, 1500);
-        }).catch(err => {
-            alert('Gagal copy teks bray: ', err);
-        });
+        tbody.innerHTML = htmlRows || '<tr><td colspan="5" class="empty-msg">Format data salah bray, pastikan teks utuh.</td></tr>';
     }
 
-    // 3. JAVASCRIPT ENGINE - SHORCUT ROBOT (TAB 2)
+    function copyKeClipboardReport() {
+        salinTabel('bodyHasilReport', '.btn-copy-report', '#38bdf8');
+    }
+
+    // 3. SHORCUT ROBOT
     function prosesDataRobot() {
         const text = document.getElementById('inputDataRobot').value;
         const tbody = document.getElementById('bodyHasilRobot');
@@ -723,10 +624,15 @@
     }
 
     function copyKeClipboardRobot() {
-        const tbody = document.getElementById('bodyHasilRobot');
+        salinTabel('bodyHasilRobot', '.btn-copy-robot', '#a855f7');
+    }
+
+    function salinTabel(tbodyId, btnSelector, originalColor) {
+        const tbody = document.getElementById(tbodyId);
         const rows = tbody.querySelectorAll('tr');
         
         if (rows.length === 1 && rows[0].classList.contains('empty-msg')) {
+            alert('Data kosong bray, apa yang mau dicopy?');
             return;
         }
 
@@ -742,146 +648,16 @@
         });
 
         navigator.clipboard.writeText(textToCopy).then(() => {
-            const btn = document.querySelector('.btn-copy-robot');
+            const btn = document.querySelector(btnSelector);
             btn.innerText = 'Copied! ✓';
             btn.style.backgroundColor = '#10b981';
             setTimeout(() => {
                 btn.innerText = 'Copy Data';
-                btn.style.backgroundColor = '#a855f7';
+                btn.style.backgroundColor = originalColor;
             }, 1500);
         }).catch(err => {
-            console.log("Gagal copy data robot bray: ", err);
+            alert('Gagal copy teks bray: ' + err);
         });
-    }
-
-    // 4. JAVASCRIPT ENGINE - SHORTCUT BNI (TAB 3)
-    const previewWrapper = document.getElementById('preview-wrapper');
-    const previewImg = document.getElementById('preview-img');
-    const statusDiv = document.getElementById('status');
-    const outputText = document.getElementById('output-text');
-    const toast = document.getElementById('toast');
-
-    window.addEventListener('paste', function(e) {
-        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-        
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].type.indexOf('image') !== -1) {
-                const blob = items[i].getAsFile();
-                const reader = new FileReader();
-                
-                statusDiv.style.color = "#fbbf24";
-                statusDiv.innerText = "Mendeteksi gambar, memuat komponen...";
-                
-                reader.onload = function(event) {
-                    previewImg.src = event.target.result;
-                    previewWrapper.style.display = 'flex';
-                    prosesOCR(event.target.result);
-                };
-                reader.readAsDataURL(blob);
-                break;
-            }
-        }
-    });
-
-    function prosesOCR(imageSrc) {
-        statusDiv.innerText = "Membaca teks gambar... (0%)";
-        outputText.value = "";
-
-        Tesseract.recognize(
-            imageSrc,
-            'ind', 
-            {
-                logger: m => {
-                    if(m.status === 'recognizing text') {
-                        statusDiv.innerText = `Sedang memproses teks: ${Math.round(m.progress * 100)}%`;
-                    }
-                }
-            }
-        ).then(({ data: { text } }) => {
-            statusDiv.style.color = "#4ade80";
-            statusDiv.innerText = "Proses Berhasil! 😎";
-            parsingData(text);
-        }).catch(err => {
-            console.error(err);
-            statusDiv.style.color = "#f87171";
-            statusDiv.innerText = "Gagal memproses gambar bray.";
-        });
-    }
-
-    function parsingData(rawText) {
-        const sekarang = new Date();
-        const jam = String(sekarang.getHours()).padStart(2, '0');
-        const menit = String(sekarang.getMinutes()).padStart(2, '0');
-        const detik = String(sekarang.getSeconds()).padStart(2, '0');
-        const jamSekarang = `${jam}:${menit}:${detik}`;
-
-        const barisTeks = rawText.split('\n').map(b => b.trim()).filter(b => b.length > 0);
-
-        let nominal = "0";
-        for (let i = 0; i < barisTeks.length; i++) {
-            let teksBersihBaris = barisTeks[i].replace(/\s/g, '');
-            let match = teksBersihBaris.match(/\d{1,3}(\.\d{3})+/);
-            if (match) {
-                nominal = match[0];
-                break; 
-            }
-        }
-        
-        nominal = nominal.replace(/\./g, ',');
-
-        let namaRectangle = "nama tidak terdeteksi";
-        for (let i = 0; i < barisTeks.length; i++) {
-            const teksBaris = barisTeks[i].toUpperCase();
-            
-            if (teksBaris.includes("KEMENTERIAN") || teksBaris.includes("KEMENTRIAN")) {
-                const matchKemen = barisTeks[i].match(/(kementerian|kementrian)\s+[a-zA-Z]+/i);
-                namaRectangle = matchKemen ? matchKemen[0].toLowerCase() : barisTeks[i].toLowerCase();
-                break;
-            } else if (teksBaris.includes("PEMERINTAH")) {
-                namaRectangle = barisTeks[i].toLowerCase();
-                break;
-            }
-        }
-
-        if (namaRectangle === "nama tidak terdeteksi" && barisTeks.length > 1) {
-            for (let i = 0; i < barisTeks.length; i++) {
-                if (barisTeks[i].toUpperCase().includes("TRANSFER") && barisTeks[i+1]) {
-                    namaRectangle = barisTeks[i+1].toLowerCase();
-                    break;
-                }
-            }
-        }
-
-        namaRectangle = namaRectangle.replace(/^[a-z]{3,4}\s*-\s*/i, '');
-        outputText.value = `${jamSekarang}\t${namaRectangle}\t${nominal}`;
-        jalankanAutoCopy();
-    }
-
-    function jalankanAutoCopy() {
-        if (!outputText.value) return;
-        outputText.select();
-        navigator.clipboard.writeText(outputText.value).then(() => {
-            bukaNotifikasi();
-        }).catch(err => {
-            console.log("Gagal auto-copy, gunakan tombol manual bray.", err);
-        });
-    }
-
-    function salinManual() {
-        if (!outputText.value) {
-            return;
-        }
-        outputText.select();
-        navigator.clipboard.writeText(outputText.value).then(() => {
-            bukaNotifikasi();
-        });
-    }
-
-    function bukaNotifikasi() {
-        toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 2000);
     }
 </script>
 </body>
