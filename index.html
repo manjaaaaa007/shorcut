@@ -392,6 +392,13 @@
 
         const listBank = ['DANA', 'BCA', 'GOPAY', 'MANDIRI', 'BRI', 'BNI', 'BSI', 'MAYBANK', 'LINKAJA', 'SEABANK', 'BANKJAGO', 'CIMB', 'OVO'];
 
+        // Dictionary prefix kode VA
+        const prefixMap = {
+            'DANA': '3901',
+            'OVO': '39358',
+            'GOPAY': '70001'
+        };
+
         for (let i = 0; i < lines.length; i++) {
             let lineUpper = lines[i].toUpperCase();
             if (lines[i].includes(',') && listBank.some(b => lineUpper.includes(b))) {
@@ -407,6 +414,12 @@
             let namaBank = partBank[0] || '';
             let noRek = partBank[1] || '';
             let namaPemilikMentah = partBank[2] || '';
+
+            // Tambahkan prefix kode jika bank sesuai
+            let upperBank = namaBank.toUpperCase();
+            if (prefixMap[upperBank]) {
+                noRek = prefixMap[upperBank] + noRek;
+            }
 
             let idxWithdraw = -1;
             for (let m = idxBank - 1; m >= 0; m--) {
@@ -471,7 +484,7 @@
         salinTabel('bodyHasil', '.btn-copy-mandiri', '#eab308');
     }
 
-    // 2. SHORCUT REPORT (DIPERBAIKI SECARA PRESISI SESUAI FORMAT TERBARU)
+    // 2. SHORCUT REPORT
     function prosesDataReport() {
         const text = document.getElementById('inputDataReport').value;
         const tbody = document.getElementById('bodyHasilReport');
@@ -485,24 +498,13 @@
         let htmlRows = '';
 
         lines.forEach(line => {
-            // Split kolom berdasarkan Tab (\t) atau Spasi ganda
             let parts = line.split(/\t+|\s{2,}/).map(p => p.trim()).filter(p => p !== '');
 
             let bank = "-", norek = "-", userid = "-", namarek = "-", nominal = "-";
 
             if (parts.length >= 6) {
-                // Berdasarkan Struktur Teks:
-                // [0] Index/No -> 1
-                // [1] Tanggal/Jam -> 2026-09-11 09:09:42
-                // [2] UserID -> pos123
-                // [3] Tipe -> Withdraw
-                // [4] Data Rekening -> RIAN PERMANA, 1750001194801, MANDIRI
-                // [5] Strip/Kosong -> -
-                // [6] Nominal -> 150,000
-
                 userid = parts[2] || "-";
 
-                // Parsing Segmen Data Rekening
                 let rekData = parts[4] || "";
                 if (rekData.includes(',')) {
                     let rekParts = rekData.split(',').map(r => r.trim());
@@ -511,7 +513,6 @@
                     bank = rekParts[2] || "-";
                 }
 
-                // Parsing Nominal
                 for (let i = 5; i < parts.length; i++) {
                     if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(parts[i])) {
                         nominal = parts[i];
@@ -519,7 +520,6 @@
                     }
                 }
             } else {
-                // Fallback dengan Regex jika struktur terpisah spasi biasa
                 let userMatch = line.match(/\b[a-zA-Z0-9_-]{3,20}\b/g);
                 let rekMatch = line.match(/([^,]+),\s*(\d+),\s*([a-zA-Z0-9]+)/);
                 let moneyMatch = line.match(/\b\d{1,3}(,\d{3})+(\.\d+)?\b/);
