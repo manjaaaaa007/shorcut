@@ -19,6 +19,8 @@
             --accent-yellow: #f59e0b;
             --accent-blue: #38bdf8;
             --accent-blue-hover: #0ea5e9;
+            --accent-red: #ef4444;
+            --accent-red-hover: #dc2626;
             --success-color: #4ade80;
         }
 
@@ -161,6 +163,11 @@
             margin-bottom: 10px;
         }
 
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
         h3 {
             margin: 0;
             color: #fff;
@@ -207,6 +214,19 @@
             transition: all 0.2s;
         }
         .btn-blue:hover { background-color: var(--accent-blue-hover); transform: translateY(-1px); }
+
+        .btn-red {
+            background-color: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-red:hover { background-color: var(--accent-red-hover); transform: translateY(-1px); }
 
         .terminal-box {
             background-color: #0b0f19;
@@ -261,13 +281,13 @@
 
 <div class="tab-navigation">
     <button class="tab-btn active" data-tab="mandiri" onclick="switchTab('mandiri')">
-        <span>⚡</span> SHORCUT MANDIRI
+        <span>⚡</span> TANPA KODE
     </button>
     <button class="tab-btn" data-tab="report" onclick="switchTab('report')">
-        <span>📊</span> SHORCUT REPORT
+        <span>📊</span> PAKAI KODE
     </button>
     <button class="tab-btn" data-tab="robot" onclick="switchTab('robot')">
-        <span>🤖</span> SHORCUT ROBOT
+        <span>🤖</span> TIDAK DIGUNAKAN
     </button>
 </div>
 
@@ -280,7 +300,10 @@
     
     <div class="output-header">
         <h3>Hasil Tampilan Berwarna:</h3>
-        <button class="btn-yellow btn-copy-mandiri" onclick="copyKeClipboardMandiri()">Copy Data</button>
+        <div class="action-buttons">
+            <button class="btn-red" onclick="bersihkanData('inputData', 'bodyHasil')">Bersihkan Data</button>
+            <button class="btn-yellow btn-copy-mandiri" onclick="copyKeClipboardMandiri()">Copy Data</button>
+        </div>
     </div>
 
     <div class="terminal-box">
@@ -312,7 +335,10 @@
     
     <div class="output-header">
         <h3>Hasil Tampilan Berwarna:</h3>
-        <button class="btn-blue btn-copy-report" onclick="copyKeClipboardReport()">Copy Data</button>
+        <div class="action-buttons">
+            <button class="btn-red" onclick="bersihkanData('inputDataReport', 'bodyHasilReport')">Bersihkan Data</button>
+            <button class="btn-blue btn-copy-report" onclick="copyKeClipboardReport()">Copy Data</button>
+        </div>
     </div>
 
     <div class="terminal-box">
@@ -344,7 +370,10 @@
     
     <div class="output-header">
         <h3>Hasil Tampilan Berwarna:</h3>
-        <button class="btn-purple btn-copy-robot" onclick="copyKeClipboardRobot()">Copy Data</button>
+        <div class="action-buttons">
+            <button class="btn-red" onclick="bersihkanData('inputDataRobot', 'bodyHasilRobot')">Bersihkan Data</button>
+            <button class="btn-purple btn-copy-robot" onclick="copyKeClipboardRobot()">Copy Data</button>
+        </div>
     </div>
 
     <div class="terminal-box">
@@ -376,6 +405,13 @@
         document.getElementById(`tab-${tabId}`).classList.add('active');
     }
 
+    // FUNGSI BERSIHKAN DATA
+    function bersihkanData(inputId, tbodyId) {
+        document.getElementById(inputId).value = '';
+        document.getElementById(tbodyId).innerHTML = '<tr><td colspan="5" class="empty-msg">Menunggu data ditempel bray...</td></tr>';
+        document.getElementById(inputId).focus();
+    }
+
     // 1. SHORCUT MANDIRI
     function prosesDataKeren() {
         const input = document.getElementById('inputData').value;
@@ -392,13 +428,6 @@
 
         const listBank = ['DANA', 'BCA', 'GOPAY', 'MANDIRI', 'BRI', 'BNI', 'BSI', 'MAYBANK', 'LINKAJA', 'SEABANK', 'BANKJAGO', 'CIMB', 'OVO'];
 
-        // Dictionary prefix kode VA
-        const prefixMap = {
-            'DANA': '3901',
-            'OVO': '39358',
-            'GOPAY': '70001'
-        };
-
         for (let i = 0; i < lines.length; i++) {
             let lineUpper = lines[i].toUpperCase();
             if (lines[i].includes(',') && listBank.some(b => lineUpper.includes(b))) {
@@ -414,12 +443,6 @@
             let namaBank = partBank[0] || '';
             let noRek = partBank[1] || '';
             let namaPemilikMentah = partBank[2] || '';
-
-            // Tambahkan prefix kode jika bank sesuai
-            let upperBank = namaBank.toUpperCase();
-            if (prefixMap[upperBank]) {
-                noRek = prefixMap[upperBank] + noRek;
-            }
 
             let idxWithdraw = -1;
             for (let m = idxBank - 1; m >= 0; m--) {
@@ -486,63 +509,104 @@
 
     // 2. SHORCUT REPORT
     function prosesDataReport() {
-        const text = document.getElementById('inputDataReport').value;
+        const input = document.getElementById('inputDataReport').value;
         const tbody = document.getElementById('bodyHasilReport');
 
-        if (!text.trim()) {
+        if (!input.trim()) {
             tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">Menunggu data ditempel bray...</td></tr>';
             return;
         }
 
-        let lines = text.trim().split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
+        const lines = input.split(/\r?\n/).map(line => line.trim()).filter(line => line !== '');
+        let barisBankDitemukan = [];
         let htmlRows = '';
 
-        lines.forEach(line => {
-            let parts = line.split(/\t+|\s{2,}/).map(p => p.trim()).filter(p => p !== '');
+        const listBank = ['DANA', 'BCA', 'GOPAY', 'MANDIRI', 'BRI', 'BNI', 'BSI', 'MAYBANK', 'LINKAJA', 'SEABANK', 'BANKJAGO', 'CIMB', 'OVO'];
 
-            let bank = "-", norek = "-", userid = "-", namarek = "-", nominal = "-";
+        const prefixMap = {
+            'DANA': '3901',
+            'OVO': '39358',
+            'GOPAY': '70001'
+        };
 
-            if (parts.length >= 6) {
-                userid = parts[2] || "-";
+        for (let i = 0; i < lines.length; i++) {
+            let lineUpper = lines[i].toUpperCase();
+            if (lines[i].includes(',') && listBank.some(b => lineUpper.includes(b))) {
+                barisBankDitemukan.push(i);
+            }
+        }
 
-                let rekData = parts[4] || "";
-                if (rekData.includes(',')) {
-                    let rekParts = rekData.split(',').map(r => r.trim());
-                    namarek = rekParts[0] || "-";
-                    norek = rekParts[1] || "-";
-                    bank = rekParts[2] || "-";
+        for (let k = 0; k < barisBankDitemukan.length; k++) {
+            let idxBank = barisBankDitemukan[k];
+            let barisBankTeks = lines[idxBank];
+
+            let partBank = barisBankTeks.split(',').map(p => p.trim());
+            let namaBank = partBank[0] || '';
+            let noRek = partBank[1] || '';
+            let namaPemilikMentah = partBank[2] || '';
+
+            let upperBank = namaBank.toUpperCase();
+            if (prefixMap[upperBank]) {
+                noRek = prefixMap[upperBank] + noRek;
+            }
+
+            let idxWithdraw = -1;
+            for (let m = idxBank - 1; m >= 0; m--) {
+                if (lines[m].toUpperCase().includes('WITHDRAW')) {
+                    idxWithdraw = m;
+                    break;
+                }
+            }
+
+            if (idxWithdraw !== -1) {
+                let barisUsernameTeks = lines[idxWithdraw - 1] || '';
+                let userID = barisUsernameTeks.replace(/^\d+\s*/, '').trim();
+                let namaRek = namaPemilikMentah.trim();
+
+                let idxBankBerikutnya = barisBankDitemukan[k + 1];
+                if (idxBankBerikutnya) {
+                    let idxWithdrawBerikutnya = -1;
+                    for (let w = idxBankBerikutnya - 1; w > idxBank; w--) {
+                        if (lines[w].toUpperCase().includes('WITHDRAW')) {
+                            idxWithdrawBerikutnya = w;
+                            break;
+                        }
+                    }
+
+                    if (idxWithdrawBerikutnya !== -1 && idxWithdrawBerikutnya - 1 >= 0) {
+                        let nextUserMentah = lines[idxWithdrawBerikutnya - 1] || '';
+                        let nextUserBersih = nextUserMentah.replace(/^\d+\s*/, '').trim();
+
+                        if (nextUserBersih && namaRek.toUpperCase().endsWith(nextUserBersih.toUpperCase())) {
+                            namaRek = namaRek.substring(0, namaRek.length - nextUserBersih.length).trim();
+                        }
+                    }
                 }
 
-                for (let i = 5; i < parts.length; i++) {
-                    if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(parts[i])) {
-                        nominal = parts[i];
+                let nominal = "0";
+                for (let n = idxWithdraw; n < idxBank; n++) {
+                    let matchNominal = lines[n].match(/\b\d{1,3}(,\d{3})+\b/);
+                    if (matchNominal) {
+                        nominal = matchNominal[0];
                         break;
                     }
                 }
-            } else {
-                let userMatch = line.match(/\b[a-zA-Z0-9_-]{3,20}\b/g);
-                let rekMatch = line.match(/([^,]+),\s*(\d+),\s*([a-zA-Z0-9]+)/);
-                let moneyMatch = line.match(/\b\d{1,3}(,\d{3})+(\.\d+)?\b/);
 
-                if (rekMatch) {
-                    namarek = rekMatch[1].trim();
-                    norek = rekMatch[2].trim();
-                    bank = rekMatch[3].trim();
-                }
-                if (moneyMatch) nominal = moneyMatch[0];
-                if (userMatch && userMatch.length > 2) userid = userMatch[2];
+                htmlRows += `<tr>
+                    <td class="val-bank">${namaBank.toUpperCase()}</td>
+                    <td class="val-rek">${noRek}</td>
+                    <td class="val-user">${userID}</td>
+                    <td class="val-nama">${namaRek.toUpperCase()}</td>
+                    <td class="val-nom">${nominal}</td>
+                </tr>`;
             }
+        }
 
-            htmlRows += `<tr>
-                <td class="val-bank">${bank.toUpperCase()}</td>
-                <td class="val-rek">${norek}</td>
-                <td class="val-user">${userid}</td>
-                <td class="val-nama">${namarek.toUpperCase()}</td>
-                <td class="val-nom">${nominal}</td>
-            </tr>`;
-        });
-
-        tbody.innerHTML = htmlRows || '<tr><td colspan="5" class="empty-msg">Format data salah bray, pastikan teks utuh.</td></tr>';
+        if (htmlRows !== '') {
+            tbody.innerHTML = htmlRows;
+        } else {
+            tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">Format data salah bray, pastikan teks utuh.</td></tr>';
+        }
     }
 
     function copyKeClipboardReport() {
